@@ -16,7 +16,7 @@ ll = stokes.wave/1000+6301.5
 
 # Create main figure
 fig, ax = plt.subplots()
-im=ax.imshow(atm.bz[:,:,19].T, cmap="PuOr", origin="lower",vmin=-500,vmax=500) # !!! z not determined
+im=ax.imshow(atm.bz[:,:,19].T, cmap="PuOr", origin="lower",vmin=-500,vmax=500) # !!! z not determined (now around tau 1)
 fig.colorbar(im,ax=ax)
 #ax.set_title("")
 
