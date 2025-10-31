@@ -16,7 +16,7 @@ ll = stokes.wave/1000+6301.5
 
 # Create main figure
 fig, ax = plt.subplots()
-im=ax.imshow(atm.bz[:,:,19].T, cmap="PuOr", origin="lower",vmin=-500,vmax=500) # !!! z not determined (now around tau 1)
+im=ax.imshow(atm.bz[:,:,19].T, cmap="PuOr", origin="lower",vmin=-500,vmax=500) # !!! z not determined (now around tau = 1)
 fig.colorbar(im,ax=ax)
 #ax.set_title("")
 
@@ -26,7 +26,11 @@ fig_detail, ax_detail = plt.subplots(2,2)
 def onclick(event):
     if event.inaxes is not None:
         ix, iy = int(event.xdata), int(event.ydata)
-        #print(f"Clicked at x={ix}, y={iy}")
+        print(f"Clicked at x={ix}, y={iy}")
+        print('Bx =', atm.bx[ix,iy,19],'G')
+        print('By =', atm.by[ix,iy,19],'G')
+        print('Bz =', atm.bz[ix,iy,19],'G')
+        print('Vz =', atm.vz[ix,iy,19]/1e5,'km/s')
 
         # Clear and redraw the detail figure
         for a in ax_detail.flatten():
