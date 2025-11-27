@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import firtez_dz as frz
 from astropy.io import fits
 from matplotlib.colors import CenteredNorm, TwoSlopeNorm
+from tqdm import tqdm
 
 plt.rc('text', usetex = False)
 
@@ -19,18 +20,18 @@ nz = 1056
 Ic = np.memmap(muramdir+'2D/Pore_10Mm_6x6km_res_Bz400G_Iout_bref_012000_to_044450.dat',dtype=np.float32,mode='r',shape=(nsnaps,nx,ny))
 I = np.zeros_like(Ic)
 # normalize
-#for i in range(nsnaps):
-#    mean = np.mean(Ic[i,800:1200,100:500])
-#    I[i,:,:] = Ic[i,:,:] / mean
+for i in range(nsnaps):
+    mean = np.mean(Ic[i,800:1200,100:500])
+    I[i,:,:] = Ic[i,:,:] / mean
 
 # Bz
-Bz = np.memmap(muramdir+'2D/Pore_10Mm_6x6km_res_Bz400G_tau_1.000_bx_012000_to_044450.dat',dtype=np.float32,mode='r',shape=(nsnaps,nx,ny))
-Bz = Bz * np.sqrt(4*np.pi)
+#Bz = np.memmap(muramdir+'2D/Pore_10Mm_6x6km_res_Bz400G_tau_1.000_bx_012000_to_044450.dat',dtype=np.float32,mode='r',shape=(nsnaps,nx,ny))
+#Bz = Bz * np.sqrt(4*np.pi)
 #Bz_new = Bz.reshape(nsnaps,nx//8,8,ny//8,8).mean(axis=(2,4))
 # Vz
-Vz = np.memmap(muramdir+'2D/Pore_10Mm_6x6km_res_Bz400G_tau_1.000_vx_012000_to_044450.dat',dtype=np.float32,mode='r',shape=(nsnaps,nx,ny))
-Vz = - Vz/1e5
-
+#Vz = np.memmap(muramdir+'2D/Pore_10Mm_6x6km_res_Bz400G_tau_1.000_vx_012000_to_044450.dat',dtype=np.float32,mode='r',shape=(nsnaps,nx,ny))
+#Vz = - Vz/1e5
+'''
 for i in range(nsnaps):
     mean = np.mean(Ic[i,800:1200,100:500])
     I[i,:,:] = Ic[i,:,:] / mean
@@ -56,15 +57,16 @@ for i in range(nsnaps):
     plt.tight_layout()
     plt.savefig('/dat/xenosh/muram_plage_pore/plots/img'+str(i)+'.png',bbox_inches='tight')
 '''
-for i in range(nsnaps):
+for i in tqdm(range(nsnaps)):
     plt.clf()
     plt.figure(figsize=(12,10))
-    plt.imshow(Bz_new[i,:,:].T,origin='lower',cmap='PuOr',norm=TwoSlopeNorm(vmin=-500,vcenter=0,vmax=2000),extent=[0,10,0,10])
+    #plt.imshow(Bz[i,850:1150,650:950].T,origin='lower',cmap='PuOr',norm=TwoSlopeNorm(vmin=-500,vcenter=0,vmax=2000),extent=[0,10,0,10])
+    #plt.imshow(Vz[i,850:1150,650:950].T,origin='lower',cmap='bwr',vmin=-6,vmax=6,extent=[0,10,0,10])
+    plt.imshow(I[i,850:1150,650:950].T,origin='lower',cmap='gray',vmin=0.2,vmax=2.,extent=[0,10,0,10])
     plt.colorbar()
     plt.xlabel('x [Mm]')
     plt.ylabel('y [Mm]')
     plt.title('t = '+ str("%.2f" %time[1,i]) + 's')
 
     plt.tight_layout()
-    plt.savefig('/dat/xenosh/muram_plage_pore/plots_asym/Bznew'+str(i)+'.png',bbox_inches='tight')
-'''
+    plt.savefig('/dat/xenosh/muram_plage_pore/plots_asym/Iccut'+str(i)+'.png',bbox_inches='tight')
